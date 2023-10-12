@@ -1,11 +1,19 @@
 #include <iostream>
 #include <cmath>
 #include <cstring>
+#include <fcntl.h>
 
 class FileManager{
   public:
-    FileManager(const char* fileName) {
-        int flags = 2;  
+    FileManager(const char* fileName, int appendMode = 0) {
+        int flags = O_WRONLY;
+
+        if (appendMode) {
+            flags |= O_APPEND;
+        } else {
+            flags |= O_TRUNC;
+        }
+
         mode_t mode = 0666;  
 
         asm volatile (
@@ -59,7 +67,7 @@ class FileManager{
 int main()
 {
   FileManager fileManager("test.txt");
-  fileManager.write("AFAGAGAAGAHA PUSSSYYYYYY");
+  fileManager.write("a PUSSSYYYYYY\n");
 
   return 0;
 }
